@@ -12,6 +12,7 @@ module.exports = function getNodesInPath(nodes, fromId, toId) {
 		var id = toTraverse.shift();
 		var currentDist = allNodes[id].dist;
 		allNodes[id].neighbours.forEach(n => {
+			if(n==0)return;
 			if((currentDist + 1) < allNodes[n].dist){
 				allNodes[n].dist = currentDist + 1;
 				allNodes[n].prev = id;

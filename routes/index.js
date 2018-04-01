@@ -5,6 +5,8 @@ var router = express.Router();
 var state = {};
 var nodes = {};
 
+var transactionLogs = [];
+
 /* GET home page. */
 router.get('/', function (req, res, next) {
 	res.render('index', { title: 'Express' });
@@ -26,9 +28,17 @@ router.get('/sync', function (req, res) {
 router.get('/setState', function (req, res) {
 	var nodeId = parseInt(req.query.id);
 	var nodeState = JSON.parse(req.query.state);
+	var prevState = state[nodeId];
 	state[nodeId] = nodeState;
+	makeLog(nodeId, prevState, nodeState);
 	res.sendStatus(200);
 });
+
+function makeLog(nodeId, prevState, nextState) {
+	if(prevState.selling != nextState.selling) {
+		transactionLogs.push(`Node ${nodeId} ${nextState.sell}`);
+	}
+}
 
 function reroute() {
 	console.log("Rerouting : " + JSON.stringify(nodes));
